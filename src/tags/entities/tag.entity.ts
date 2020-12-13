@@ -1,6 +1,6 @@
 import { Table, Column, Model, CreatedAt, UpdatedAt, Length, BelongsToMany } from 'sequelize-typescript';
-import { PictureTag } from './picture-tag.entity';
-import { Picture } from './picture.entity';
+import { PictureTag } from '../../pictures/entities/picture-tag.entity';
+import { Picture } from '../../pictures/entities/picture.entity';
 
 @Table
 export class Tag extends Model<Tag> {

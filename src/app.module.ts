@@ -3,7 +3,7 @@ import { UserModule } from './users/user.module';
 import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './auth/auth.module';
 import { PictureModule } from './pictures/picture.module';
-import { TagModule } from './tag/tag.module';
+import { TagModule } from './tags/tag.module';
 
 @Module({
   imports: [

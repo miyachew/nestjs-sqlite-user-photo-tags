@@ -2,7 +2,7 @@ import { Table, Column, Model, CreatedAt, UpdatedAt, ForeignKey, BelongsTo, Belo
 import { User } from 'src/users/entities/user.entity';
 import { PictureLike } from './picture-like.entity';
 import { PictureTag } from './picture-tag.entity';
-import { Tag } from './tag.entity';
+import { Tag } from '../../tags/entities/tag.entity';
 
 @Table
 export class Picture extends Model<Picture> {

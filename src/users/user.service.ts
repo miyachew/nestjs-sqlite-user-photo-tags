@@ -4,6 +4,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { UserData } from './user.interface';
+import { Picture } from 'src/pictures/entities/picture.entity';
+import { PictureLike } from 'src/pictures/entities/picture-like.entity';
 
 @Injectable()
 export class UserService {
@@ -42,9 +44,21 @@ export class UserService {
   }
 
   async remove(id: number): Promise<void> {
-    const user = await this.findOneActiveById(id);
+    const user = await User.findOne({
+      where: { id },
+      include: [{
+        model: Picture
+      },
+      {
+        model: PictureLike
+      }]
+    });
     if (!user) {
       throw new NotFoundException("User not found.");
+    }
+
+    if (user.pictures.length > 0 || user.pictureLikes.length > 0) {
+      throw new UnprocessableEntityException("Cannot delete user. Please delete pictures / likes.");
     }
     await user.destroy();
   }

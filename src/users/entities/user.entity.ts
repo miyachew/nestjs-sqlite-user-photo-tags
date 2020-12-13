@@ -1,4 +1,5 @@
-import { Table, Column, Model, CreatedAt, UpdatedAt, Unique, PrimaryKey, HasMany, Scopes, AutoIncrement, DefaultScope, DataType } from 'sequelize-typescript';
+import { Table, Column, Model, CreatedAt, UpdatedAt, Unique, HasMany, Scopes } from 'sequelize-typescript';
+import { PictureLike } from 'src/pictures/entities/picture-like.entity';
 import { Picture } from 'src/pictures/entities/picture.entity';
 
 @Scopes(() => ({
@@ -24,6 +25,9 @@ export class User extends Model<User> {
 
     @HasMany(() => Picture)
     pictures: Picture[];
+
+    @HasMany(() => PictureLike)
+    pictureLikes: PictureLike[];
 
     @CreatedAt
     creationDate: Date;

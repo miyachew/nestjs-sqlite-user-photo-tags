@@ -2,7 +2,7 @@ import { Sequelize } from 'sequelize-typescript';
 import { PictureLike } from 'src/pictures/entities/picture-like.entity';
 import { PictureTag } from 'src/pictures/entities/picture-tag.entity';
 import { Picture } from 'src/pictures/entities/picture.entity';
-import { Tag } from 'src/pictures/entities/tag.entity';
+import { Tag } from 'src/tags/entities/tag.entity';
 import { User } from 'src/users/entities/user.entity';
 
 export const databaseProviders = [
