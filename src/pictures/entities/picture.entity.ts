@@ -11,6 +11,12 @@ export class Picture extends Model<Picture> {
     @Column
     description: string;
 
+    @Column
+    key: string;
+
+    @Column
+    url: string;
+
     @ForeignKey(() => User)
     @Column
     userId: number;

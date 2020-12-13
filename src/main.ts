@@ -5,6 +5,8 @@ import * as bodyParser from 'body-parser';
 import * as compression from 'compression';
 import * as helmet from 'helmet';
 import { ValidationPipe } from '@nestjs/common';
+import { config } from 'aws-sdk';
+import { awsConstants } from './config/config.constants';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -26,6 +28,12 @@ async function bootstrap() {
     errorHttpStatusCode: 422,
     whitelist: true
   }));
+
+  config.update({
+    accessKeyId: awsConstants.aws_access_key_id,
+    secretAccessKey: awsConstants.aws_secret_access_key,
+    region: awsConstants.aws_region,
+  });
 
   await app.listen(3000);
 }

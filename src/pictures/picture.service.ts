@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { Sequelize } from 'sequelize';
 import { User } from 'src/users/entities/user.entity';
 import { CreatePictureDto } from './dto/create-picture.dto';
@@ -6,11 +6,21 @@ import { UpdatePictureDto } from './dto/update-picture.dto';
 import { PictureLike } from './entities/picture-like.entity';
 import { PictureTag } from './entities/picture-tag.entity';
 import { Picture } from './entities/picture.entity';
+import { awsConstants } from 'src/config/config.constants';
+import * as path from 'path';
+import { S3 } from 'aws-sdk';
+import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class PictureService {
-  async create(createPictureDto: CreatePictureDto, userId: number) {
-    const picture = await Picture.create({ ...createPictureDto, userId });
+  async create(createPictureDto: CreatePictureDto, userId: number, image: any) {
+    const uploadedImage = await this.uploadImage(image);
+    const picture = await Picture.create({
+      ...createPictureDto,
+      userId,
+      key: uploadedImage.Key,
+      url: uploadedImage.Location
+    });
     if (createPictureDto.tags) {
       const toInsert = [];
       createPictureDto.tags.map(tag => {
@@ -24,6 +34,8 @@ export class PictureService {
     }
     return picture;
   }
+
+
 
   async findAll() {
     return await Picture.findAll({
@@ -73,7 +85,8 @@ export class PictureService {
           as: 'likes',
           attributes: []
         },
-      ]
+      ],
+      group: ['Picture.id', 'tags.id']
     });
     if (!picture) {
       throw new NotFoundException("Picture not found.");
@@ -114,8 +127,35 @@ export class PictureService {
       throw new NotFoundException("Picture not found.");
     }
 
+    await this.removeImage(picture.key);
     await PictureLike.destroy({ where: { pictureId: picture.id } });
     await PictureTag.destroy({ where: { pictureId: picture.id } });
     await picture.destroy();
+  }
+
+  async uploadImage(image: any) {
+    if (!image) {
+      throw new UnprocessableEntityException("Please upload an image.");
+    }
+    const ext = path.extname(image.originalname);
+    if (ext !== '.png' && ext !== '.jpg' && ext !== '.jpeg') {
+      throw new UnprocessableEntityException("Only images are allowed");
+    }
+
+    const s3 = new S3();
+    return await s3.upload({
+      Bucket: awsConstants.s3_bucket_name,
+      Body: image.buffer,
+      Key: `${uuid()}-${image.originalname}`,
+      ACL: 'public-read'
+    }).promise();
+  }
+
+  async removeImage(key: string) {
+    const s3 = new S3();
+    await s3.deleteObject({
+      Bucket: awsConstants.s3_bucket_name,
+      Key: key
+    }).promise();
   }
 }
