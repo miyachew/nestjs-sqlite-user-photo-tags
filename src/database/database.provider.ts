@@ -16,7 +16,7 @@ export const databaseProviders = [
                 storage: "./db/proj_db.sqlite"
             });
             sequelize.addModels([User, Picture, Tag, PictureTag, PictureLike]);
-            await sequelize.sync();
+            // await sequelize.sync();
             return sequelize;
         },
     },

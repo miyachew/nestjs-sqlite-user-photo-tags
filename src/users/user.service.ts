@@ -3,29 +3,30 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
+import { UserInfo } from 'os';
 
 @Injectable()
 export class UserService {
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto): Promise<Partial<User>> {
     await this.validateUsernameUniqueness(createUserDto.username);
 
-    const { password, ...user } = await User.create({
+    const user = await User.create({
       ...createUserDto,
       password: this.hashPassword(createUserDto.password)
     });
-    return user;
+    return this.formatUserInfo(user);
   }
 
   async findAll(): Promise<User[]> {
     return await User.scope('excludeHidden').findAll();
   }
 
-  async findOne(id: number): Promise<User> {
+  async findOne(id: number): Promise<Partial<User>> {
     const user = await this.findOneActiveById(id);
     if (!user) {
       throw new NotFoundException("User not found.");
     }
-    return user;
+    return this.formatUserInfo(user);
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
@@ -54,6 +55,15 @@ export class UserService {
 
   findOneActiveByUsername(username: string): Promise<User | undefined> {
     return User.findOne({ where: { username, isActive: true } });
+  }
+
+  formatUserInfo(user: User): Partial<User> {
+    return {
+      id: user.id,
+      name: user.name,
+      username: user.username,
+      isActive: user.isActive
+    };
   }
 
   private async validateUsernameUniqueness(username: string): Promise<void> {
