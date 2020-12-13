@@ -1,6 +1,5 @@
-import { Table, Column, Model, ForeignKey } from 'sequelize-typescript';
+import { Table, Column, Model, ForeignKey, BelongsTo } from 'sequelize-typescript';
 import { Picture } from './picture.entity';
-import { Tag } from '../../tags/entities/tag.entity';
 
 @Table
 export class PictureTag extends Model<PictureTag> {
@@ -8,7 +7,9 @@ export class PictureTag extends Model<PictureTag> {
     @Column
     pictureId: number;
 
-    @ForeignKey(() => Tag)
     @Column
-    tagId: number;
+    tag: string;
+
+    @BelongsTo(() => Picture)
+    picture: Picture;
 }

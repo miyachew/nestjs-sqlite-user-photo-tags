@@ -1,16 +1,14 @@
 import { Module } from '@nestjs/common';
 import { PictureService } from './picture.service';
 import { PictureController } from './picture.controller';
-import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from 'src/auth/constants';
+import { PictureTagService } from './picture-tags/picture-tag.service';
 
 @Module({
   imports: [],
   controllers: [PictureController],
   providers: [
-    PictureService
+    PictureService,
+    PictureTagService
   ]
 })
 export class PictureModule { }

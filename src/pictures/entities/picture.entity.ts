@@ -1,11 +1,16 @@
-import { Table, Column, Model, CreatedAt, UpdatedAt, ForeignKey, BelongsTo, BelongsToMany } from 'sequelize-typescript';
+import { Table, Column, Model, CreatedAt, UpdatedAt, ForeignKey, BelongsTo, BelongsToMany, HasMany } from 'sequelize-typescript';
 import { User } from 'src/users/entities/user.entity';
 import { PictureLike } from './picture-like.entity';
 import { PictureTag } from './picture-tag.entity';
-import { Tag } from '../../tags/entities/tag.entity';
 
 @Table
 export class Picture extends Model<Picture> {
+    @Column
+    title: string;
+
+    @Column
+    description: string;
+
     @ForeignKey(() => User)
     @Column
     userId: number;
@@ -13,11 +18,14 @@ export class Picture extends Model<Picture> {
     @BelongsTo(() => User)
     user: User;
 
-    @BelongsToMany(() => Tag, () => PictureTag)
-    tags: Tag[];
+    @HasMany(() => PictureTag)
+    tags: PictureTag[];
 
     @BelongsToMany(() => User, () => PictureLike)
     likedBy: User[];
+
+    @HasMany(() => PictureLike)
+    likes: PictureLike[];
 
     @CreatedAt
     creationDate: Date;

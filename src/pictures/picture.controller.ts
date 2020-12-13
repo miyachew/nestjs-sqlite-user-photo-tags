@@ -1,18 +1,25 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, UseGuards, Request, HttpCode } from '@nestjs/common';
 import { PictureService } from './picture.service';
 import { CreatePictureDto } from './dto/create-picture.dto';
 import { UpdatePictureDto } from './dto/update-picture.dto';
 import { Public } from 'src/decorators/auth.decorator';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { AddPictureTagDto } from './dto/add-picture-tag.dto';
+import { PictureTagService } from './picture-tags/picture-tag.service';
 
 @UseGuards(JwtAuthGuard)
 @Controller('pictures')
 export class PictureController {
-  constructor(private readonly pictureService: PictureService) { }
+  constructor(
+    private readonly pictureService: PictureService,
+    private readonly pictureTagService: PictureTagService
+  ) { }
 
   @Post()
-  create(@Body() createPictureDto: CreatePictureDto) {
-    return this.pictureService.create(createPictureDto);
+  create(@Body() createPictureDto: CreatePictureDto, @Request() req) {
+    console.log('no');
+
+    return this.pictureService.create(createPictureDto, req.user.id);
   }
 
   @Public()
@@ -28,12 +35,27 @@ export class PictureController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updatePictureDto: UpdatePictureDto) {
-    return this.pictureService.update(+id, updatePictureDto);
+  @HttpCode(204)
+  update(@Param('id') id: string, @Body() updatePictureDto: UpdatePictureDto, @Request() req) {
+    return this.pictureService.update(+id, updatePictureDto, req.user.id);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.pictureService.remove(+id);
+  @HttpCode(204)
+  remove(@Param('id') id: string, @Request() req) {
+    return this.pictureService.remove(+id, req.user.id);
+  }
+
+  @Post(':id/tags')
+  addPictureTag(@Param('id') id: string, @Body() addPictureTagDto: AddPictureTagDto, @Request() req) {
+    console.log('ere');
+
+    return this.pictureTagService.addPictureTag(+id, addPictureTagDto, req.user.id);
+  }
+
+  @Delete(':id/tags/:tagId')
+  @HttpCode(204)
+  removePictureTag(@Param('id') id: string, @Param('tagId') tagId: string, @Request() req) {
+    return this.pictureTagService.removePictureTag(+id, +tagId, req.user.id);
   }
 }

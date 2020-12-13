@@ -3,7 +3,7 @@ import { UserModule } from './users/user.module';
 import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './auth/auth.module';
 import { PictureModule } from './pictures/picture.module';
-import { TagModule } from './tags/tag.module';
+import { PictureTagService } from './pictures/picture-tags/picture-tag.service';
 
 @Module({
   imports: [
@@ -11,8 +11,7 @@ import { TagModule } from './tags/tag.module';
     UserModule,
     AuthModule,
     PictureModule,
-    TagModule,
   ],
-  providers: [],
+  providers: [PictureTagService],
 })
 export class AppModule { }
