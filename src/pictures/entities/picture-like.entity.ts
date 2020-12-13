@@ -1,4 +1,4 @@
-import { Table, Column, Model, ForeignKey, CreatedAt, UpdatedAt } from 'sequelize-typescript';
+import { Table, Column, Model, ForeignKey, CreatedAt, UpdatedAt, BelongsTo } from 'sequelize-typescript';
 import { User } from 'src/users/entities/user.entity';
 import { Picture } from './picture.entity';
 
@@ -17,4 +17,7 @@ export class PictureLike extends Model<PictureLike> {
 
     @UpdatedAt
     updatedOn: Date;
+
+    @BelongsTo(() => User)
+    user: User;
 }

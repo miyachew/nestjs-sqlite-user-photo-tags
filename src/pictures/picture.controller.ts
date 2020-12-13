@@ -6,19 +6,19 @@ import { Public } from 'src/decorators/auth.decorator';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { AddPictureTagDto } from './dto/add-picture-tag.dto';
 import { PictureTagService } from './picture-tags/picture-tag.service';
+import { PictureLikeService } from './picture-likes/picture-like.service';
 
 @UseGuards(JwtAuthGuard)
 @Controller('pictures')
 export class PictureController {
   constructor(
     private readonly pictureService: PictureService,
-    private readonly pictureTagService: PictureTagService
+    private readonly pictureTagService: PictureTagService,
+    private readonly pictureLikeService: PictureLikeService
   ) { }
 
   @Post()
   create(@Body() createPictureDto: CreatePictureDto, @Request() req) {
-    console.log('no');
-
     return this.pictureService.create(createPictureDto, req.user.id);
   }
 
@@ -48,8 +48,6 @@ export class PictureController {
 
   @Post(':id/tags')
   addPictureTag(@Param('id') id: string, @Body() addPictureTagDto: AddPictureTagDto, @Request() req) {
-    console.log('ere');
-
     return this.pictureTagService.addPictureTag(+id, addPictureTagDto, req.user.id);
   }
 
@@ -57,5 +55,21 @@ export class PictureController {
   @HttpCode(204)
   removePictureTag(@Param('id') id: string, @Param('tagId') tagId: string, @Request() req) {
     return this.pictureTagService.removePictureTag(+id, +tagId, req.user.id);
+  }
+
+  @Get(':id/likes')
+  getPictureLike(@Param('id') id: string) {
+    return this.pictureLikeService.getPictureLikes(+id);
+  }
+
+  @Post(':id/likes')
+  addPictureLike(@Param('id') id: string, @Request() req) {
+    return this.pictureLikeService.addPictureLike(+id, req.user.id);
+  }
+
+  @Delete(':id/likes')
+  @HttpCode(204)
+  removePictureLike(@Param('id') id: string, @Request() req) {
+    return this.pictureLikeService.removePictureLike(+id, req.user.id);
   }
 }

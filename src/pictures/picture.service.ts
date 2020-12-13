@@ -42,7 +42,8 @@ export class PictureService {
         },
         {
           model: PictureLike,
-          as: 'likes'
+          as: 'likes',
+          attributes: []
         },
       ],
       group: ['Picture.id', 'tags.id']
@@ -53,6 +54,9 @@ export class PictureService {
     const picture = await Picture.findOne({
       where: {
         id
+      },
+      attributes: {
+        include: [[Sequelize.fn("COUNT", Sequelize.col("likes.pictureId")), "totalLikes"]]
       },
       include: [
         {
@@ -66,7 +70,8 @@ export class PictureService {
         },
         {
           model: PictureLike,
-          as: 'likes'
+          as: 'likes',
+          attributes: []
         },
       ]
     });
