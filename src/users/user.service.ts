@@ -1,18 +1,18 @@
 import { Injectable, NotFoundException, ServiceUnavailableException, UnprocessableEntityException } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
+import { RegisterDto } from '../auth/dtos/register.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
-import { UserInfo } from 'os';
+import { UserData } from './user.interface';
 
 @Injectable()
 export class UserService {
-  async create(createUserDto: CreateUserDto): Promise<Partial<User>> {
-    await this.validateUsernameUniqueness(createUserDto.username);
+  async register(registerDto: RegisterDto): Promise<UserData> {
+    await this.validateUsernameUniqueness(registerDto.username);
 
     const user = await User.create({
-      ...createUserDto,
-      password: this.hashPassword(createUserDto.password)
+      ...registerDto,
+      password: this.hashPassword(registerDto.password)
     });
     return this.formatUserInfo(user);
   }
@@ -21,7 +21,7 @@ export class UserService {
     return await User.scope('excludeHidden').findAll();
   }
 
-  async findOne(id: number): Promise<Partial<User>> {
+  async findOne(id: number): Promise<UserData> {
     const user = await this.findOneActiveById(id);
     if (!user) {
       throw new NotFoundException("User not found.");
@@ -57,7 +57,7 @@ export class UserService {
     return User.findOne({ where: { username, isActive: true } });
   }
 
-  formatUserInfo(user: User): Partial<User> {
+  formatUserInfo(user: User): UserData {
     return {
       id: user.id,
       name: user.name,

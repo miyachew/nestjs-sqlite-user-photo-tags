@@ -1,9 +1,10 @@
 import { Injectable, ServiceUnavailableException } from '@nestjs/common';
 import { UserService } from 'src/users/user.service';
 import { User } from 'src/users/entities/user.entity';
-import { UserLoginResponse } from 'src/users/user.interface';
+import { UserLoginResponse, UserRegisterResponse } from 'src/users/user.interface';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { RegisterDto } from './dtos/register.dto';
 
 @Injectable()
 export class AuthService {
@@ -25,6 +26,15 @@ export class AuthService {
         const payload = { username: user.username, sub: user.id };
         return {
             accessToken: this.jwtService.sign(payload)
+        };
+    }
+
+    async register(registerDto: RegisterDto): Promise<UserRegisterResponse> {
+        const user = await this.userService.register(registerDto);
+        const payload = { username: user.username, sub: user.id };
+        return {
+            accessToken: this.jwtService.sign(payload),
+            user
         };
     }
 
