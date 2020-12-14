@@ -9,7 +9,7 @@ import { Picture } from './entities/picture.entity';
 import * as path from 'path';
 import { S3 } from 'aws-sdk';
 import { v4 as uuid } from 'uuid';
-import { ConfigService } from 'src/config/config.service';
+import { ConfigService } from './../config/config.service';
 
 @Injectable()
 export class PictureService {

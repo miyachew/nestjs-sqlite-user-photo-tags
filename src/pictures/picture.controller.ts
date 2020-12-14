@@ -9,7 +9,6 @@ import { PictureTagService } from './picture-tags/picture-tag.service';
 import { PictureLikeService } from './picture-likes/picture-like.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiNoContentResponse, ApiNotFoundResponse, ApiOkResponse, ApiServiceUnavailableResponse, ApiTags } from '@nestjs/swagger';
-// import { Request } from 'express';
 
 @UseGuards(JwtAuthGuard)
 @ApiTags('pictures')

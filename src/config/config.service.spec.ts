@@ -10,7 +10,6 @@ describe('ConfigService', () => {
         {
           provide: ConfigService,
           useValue: new ConfigService({ folder: './src/config/test.lib' })
-
         }
       ],
     }).compile();
