@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
-import { Sequelize } from 'sequelize';
+import { Sequelize } from 'sequelize-typescript';
 import { User } from './../users/entities/user.entity';
 import { CreatePictureDto } from './dto/create-picture.dto';
 import { UpdatePictureDto } from './dto/update-picture.dto';
@@ -15,7 +15,9 @@ import { ConfigService } from 'src/config/config.service';
 export class PictureService {
   private s3Bucket: string
 
-  constructor(private configService: ConfigService) {
+  constructor(
+    private configService: ConfigService
+  ) {
     this.s3Bucket = this.configService.get('S3_BUCKET_NAME');
   }
 
