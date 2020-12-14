@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { User } from 'src/users/entities/user.entity';
+import { User } from './../../users/entities/user.entity';
 import { PictureLike } from '../entities/picture-like.entity';
 import { Picture } from '../entities/picture.entity';
 
@@ -46,9 +46,6 @@ export class PictureLikeService {
     }
 
     async removePictureLike(pictureId: number, userId: number): Promise<void> {
-        console.log('hey');
-        console.log(pictureId, userId);
-
         await PictureLike.destroy({ where: { pictureId, userId } });
     }
 }

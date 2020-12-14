@@ -1,18 +1,24 @@
 import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 import { Sequelize } from 'sequelize';
-import { User } from 'src/users/entities/user.entity';
+import { User } from './../users/entities/user.entity';
 import { CreatePictureDto } from './dto/create-picture.dto';
 import { UpdatePictureDto } from './dto/update-picture.dto';
 import { PictureLike } from './entities/picture-like.entity';
 import { PictureTag } from './entities/picture-tag.entity';
 import { Picture } from './entities/picture.entity';
-import { awsConstants } from 'src/config/config.constants';
 import * as path from 'path';
 import { S3 } from 'aws-sdk';
 import { v4 as uuid } from 'uuid';
+import { ConfigService } from 'src/config/config.service';
 
 @Injectable()
 export class PictureService {
+  private s3Bucket: string
+
+  constructor(private configService: ConfigService) {
+    this.s3Bucket = this.configService.get('S3_BUCKET_NAME');
+  }
+
   async create(createPictureDto: CreatePictureDto, userId: number, image: any) {
     const uploadedImage = await this.uploadImage(image);
     const picture = await Picture.create({
@@ -136,7 +142,7 @@ export class PictureService {
 
     const s3 = new S3();
     return await s3.upload({
-      Bucket: awsConstants.s3_bucket_name,
+      Bucket: this.s3Bucket,
       Body: image.buffer,
       Key: `${uuid()}-${image.originalname}`,
       ACL: 'public-read'
@@ -146,7 +152,7 @@ export class PictureService {
   async removeImage(key: string) {
     const s3 = new S3();
     await s3.deleteObject({
-      Bucket: awsConstants.s3_bucket_name,
+      Bucket: this.s3Bucket,
       Key: key
     }).promise();
   }

@@ -6,11 +6,10 @@ import * as compression from 'compression';
 import * as helmet from 'helmet';
 import { ValidationPipe } from '@nestjs/common';
 import { config } from 'aws-sdk';
-import { awsConstants } from './config/config.constants';
+import { ConfigService } from './config/config.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
 
   // Enable Helmet Middleware
   app.use(helmet());
@@ -29,10 +28,12 @@ async function bootstrap() {
     whitelist: true
   }));
 
+  // Set up aws sdk
+  const configService = new ConfigService({ folder: './config' });
   config.update({
-    accessKeyId: awsConstants.aws_access_key_id,
-    secretAccessKey: awsConstants.aws_secret_access_key,
-    region: awsConstants.aws_region,
+    accessKeyId: configService.get('AWS_ACCESS_KEY_ID'),
+    secretAccessKey: configService.get('AWS_SECRET_ACCESS_KEY'),
+    region: configService.get('AWS_REGION'),
   });
 
   await app.listen(3000);

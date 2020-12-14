@@ -3,9 +3,9 @@ import { RegisterDto } from '../auth/dtos/register.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
-import { UserData } from './user.interface';
-import { Picture } from 'src/pictures/entities/picture.entity';
-import { PictureLike } from 'src/pictures/entities/picture-like.entity';
+import { UserData } from './interfaces/user.interface';
+import { Picture } from './../pictures/entities/picture.entity';
+import { PictureLike } from './../pictures/entities/picture-like.entity';
 
 @Injectable()
 export class UserService {

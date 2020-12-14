@@ -1,5 +1,5 @@
 import { Table, Column, Model, ForeignKey, CreatedAt, UpdatedAt, BelongsTo } from 'sequelize-typescript';
-import { User } from 'src/users/entities/user.entity';
+import { User } from './../../users/entities/user.entity';
 import { Picture } from './picture.entity';
 
 @Table

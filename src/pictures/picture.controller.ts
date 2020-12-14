@@ -2,8 +2,8 @@ import { Controller, Get, Post, Body, Put, Param, Delete, UseGuards, Request, Ht
 import { PictureService } from './picture.service';
 import { CreatePictureDto } from './dto/create-picture.dto';
 import { UpdatePictureDto } from './dto/update-picture.dto';
-import { Public } from 'src/decorators/auth.decorator';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { Public } from './../decorators/auth.decorator';
+import { JwtAuthGuard } from './../auth/jwt-auth.guard';
 import { AddPictureTagDto } from './dto/add-picture-tag.dto';
 import { PictureTagService } from './picture-tags/picture-tag.service';
 import { PictureLikeService } from './picture-likes/picture-like.service';

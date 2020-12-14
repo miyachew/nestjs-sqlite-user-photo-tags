@@ -1,7 +1,7 @@
 import { Injectable, ServiceUnavailableException } from '@nestjs/common';
-import { UserService } from 'src/users/user.service';
-import { User } from 'src/users/entities/user.entity';
-import { UserLoginResponse, UserRegisterResponse } from 'src/users/user.interface';
+import { UserService } from './../users/user.service';
+import { User } from './../users/entities/user.entity';
+import { UserLoginResponse, UserRegisterResponse } from './../users/interfaces/user.interface';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { RegisterDto } from './dtos/register.dto';

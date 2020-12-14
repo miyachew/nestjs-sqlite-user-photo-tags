@@ -1,5 +1,5 @@
 import { Table, Column, Model, CreatedAt, UpdatedAt, ForeignKey, BelongsTo, BelongsToMany, HasMany } from 'sequelize-typescript';
-import { User } from 'src/users/entities/user.entity';
+import { User } from './../../users/entities/user.entity';
 import { PictureLike } from './picture-like.entity';
 import { PictureTag } from './picture-tag.entity';
 

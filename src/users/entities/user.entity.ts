@@ -1,6 +1,6 @@
 import { Table, Column, Model, CreatedAt, UpdatedAt, Unique, HasMany, Scopes } from 'sequelize-typescript';
-import { PictureLike } from 'src/pictures/entities/picture-like.entity';
-import { Picture } from 'src/pictures/entities/picture.entity';
+import { PictureLike } from './../../pictures/entities/picture-like.entity';
+import { Picture } from './../../pictures/entities/picture.entity';
 
 @Scopes(() => ({
     excludeHidden: {
