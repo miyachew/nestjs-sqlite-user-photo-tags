@@ -35,13 +35,8 @@ export class PictureService {
     return picture;
   }
 
-
-
-  async findAll() {
+  async findAllPaginated(limit: number, offset: number) {
     return await Picture.findAll({
-      attributes: {
-        include: [[Sequelize.fn("COUNT", Sequelize.col("likes.pictureId")), "totalLikes"]]
-      },
       include: [
         {
           model: User,
@@ -52,13 +47,10 @@ export class PictureService {
           model: PictureTag,
           attributes: ['id', 'tag']
         },
-        {
-          model: PictureLike,
-          as: 'likes',
-          attributes: []
-        },
       ],
-      group: ['Picture.id', 'tags.id']
+      order: [['creationDate', 'DESC']],
+      limit: limit,
+      offset: offset
     });
   }
 

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, UseGuards, Request, HttpCode, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, UseGuards, Request, HttpCode, UseInterceptors, UploadedFile, Req, Query } from '@nestjs/common';
 import { PictureService } from './picture.service';
 import { CreatePictureDto } from './dto/create-picture.dto';
 import { UpdatePictureDto } from './dto/update-picture.dto';
@@ -8,6 +8,7 @@ import { AddPictureTagDto } from './dto/add-picture-tag.dto';
 import { PictureTagService } from './picture-tags/picture-tag.service';
 import { PictureLikeService } from './picture-likes/picture-like.service';
 import { FileInterceptor } from '@nestjs/platform-express';
+// import { Request } from 'express';
 
 @UseGuards(JwtAuthGuard)
 @Controller('pictures')
@@ -26,8 +27,9 @@ export class PictureController {
 
   @Public()
   @Get()
-  findAll() {
-    return this.pictureService.findAll();
+  findAll(@Query() query) {
+    let { limit, offset } = query;
+    return this.pictureService.findAllPaginated(+limit, +offset);
   }
 
   @Public()
