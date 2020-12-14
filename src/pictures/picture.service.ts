@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { Injectable, NotFoundException, ServiceUnavailableException, UnprocessableEntityException } from '@nestjs/common';
 import { Sequelize } from 'sequelize-typescript';
 import { User } from './../users/entities/user.entity';
 import { CreatePictureDto } from './dto/create-picture.dto';
@@ -142,20 +142,28 @@ export class PictureService {
       throw new UnprocessableEntityException("Only images are allowed");
     }
 
-    const s3 = new S3();
-    return await s3.upload({
-      Bucket: this.s3Bucket,
-      Body: image.buffer,
-      Key: `${uuid()}-${image.originalname}`,
-      ACL: 'public-read'
-    }).promise();
+    try {
+      const s3 = new S3();
+      return await s3.upload({
+        Bucket: this.s3Bucket,
+        Body: image.buffer,
+        Key: `${uuid()}-${image.originalname}`,
+        ACL: 'public-read'
+      }).promise();
+    } catch (error) {
+      throw new ServiceUnavailableException("Upload image failed");
+    }
   }
 
   async removeImage(key: string) {
-    const s3 = new S3();
-    await s3.deleteObject({
-      Bucket: this.s3Bucket,
-      Key: key
-    }).promise();
+    try {
+      const s3 = new S3();
+      await s3.deleteObject({
+        Bucket: this.s3Bucket,
+        Key: key
+      }).promise();
+    } catch (error) {
+      throw new ServiceUnavailableException("Remove image failed");
+    }
   }
 }

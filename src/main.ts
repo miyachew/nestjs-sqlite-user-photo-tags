@@ -7,6 +7,7 @@ import * as helmet from 'helmet';
 import { ValidationPipe } from '@nestjs/common';
 import { config } from 'aws-sdk';
 import { ConfigService } from './config/config.service';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -35,6 +36,22 @@ async function bootstrap() {
     secretAccessKey: configService.get('AWS_SECRET_ACCESS_KEY'),
     region: configService.get('AWS_REGION'),
   });
+
+  // Swagger
+  const options = new DocumentBuilder()
+    .setTitle('nestjs-sqlite-user-photo-tags')
+    .setDescription('nestjs-sqlite-user-photo-tags API list')
+    .setVersion('1.0')
+    .addTag('auth')
+    .addTag('users')
+    .addTag('pictures')
+    .addBearerAuth(
+      { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+      'access-token',
+    )
+    .build();
+  const document = SwaggerModule.createDocument(app, options);
+  SwaggerModule.setup('api', app, document);
 
   await app.listen(3000);
 }

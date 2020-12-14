@@ -19,6 +19,7 @@ Detail:
 This project includes:
 - Passport Authentication with local strategy and jwt strategy
 - S3 integration for photo upload
+- Api swagger documentation at http://localhost:3000/api
 
 
 ## Installation
