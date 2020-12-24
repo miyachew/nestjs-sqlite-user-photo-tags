@@ -2,6 +2,7 @@
 Framework: [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
 Database: Sqlite3 with Sequelize
+CI: Github Actions
 ## Project Description
 Rest API to do CRUD operations on the following resources:
 
