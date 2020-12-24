@@ -1,0 +1,42 @@
+{
+  "name": "swype-customer-backend",
+  "verbose": true,
+  "rootDir": ".",
+  "testPathIgnorePatterns": [
+    "/node_modules/",
+    "/dist/"
+  ],
+  "collectCoverage": true,
+  "coverageReporters": [
+    "json",
+    "lcov",
+    "clover",
+    "text"
+  ],
+  "coverageDirectory": "../coverage",
+  "collectCoverageFrom": [
+    "**/*.ts",
+    "!**/database/**",
+    "!**/node_modules/**",
+    "!**/docs/**",
+    "!**/coverage/**",
+    "!**/tests/**",
+    "!**/main.ts"
+  ],
+  "testTimeout": 15000,
+  "forceExit": true,
+  "moduleFileExtensions": [
+    "js",
+    "json",
+    "ts"
+  ],
+  "testEnvironment": "node",
+  "coveragePathIgnorePatterns": [
+    "/database/migrations/",
+    "/node_modules/",
+    "/vendor/"
+  ],
+  "transform": {
+    "^.+\\.(t)s$": "ts-jest"
+  }
+}
