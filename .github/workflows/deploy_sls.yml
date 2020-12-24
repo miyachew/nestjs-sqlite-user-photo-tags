@@ -26,8 +26,8 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: Install packages
       run: npm install
+    - run: pwd
     - name: Copy test env
-      run: pwd
       run: cp ./src/config/test.lib/test.env  /home/runner/work/nestjs-sqlite-user-photo-tags/nestjs-sqlite-user-photo-tags/src/config/test.lib/test.env
     - name: Run tests
       run: npm run test
