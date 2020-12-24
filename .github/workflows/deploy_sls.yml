@@ -27,6 +27,6 @@ jobs:
     - name: Install packages
       run: npm install
     - name: Copy test env
-      run: COPY ./src/config/test.lib/test.env  /home/runner/work/nestjs-sqlite-user-photo-tags/nestjs-sqlite-user-photo-tags/src/config/test.lib/test.env
+      run: cp ./src/config/test.lib/test.env  /home/runner/work/nestjs-sqlite-user-photo-tags/nestjs-sqlite-user-photo-tags/src/config/test.lib/test.env
     - name: Run tests
       run: npm run test
